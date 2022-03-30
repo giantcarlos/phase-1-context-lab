@@ -9,6 +9,63 @@
  for you to use if you need it!
  */
 
+const createEmployeeRecord = (recordArray) => {
+    return {
+        firstName: recordArray[0],
+        familyName: recordArray[1],
+        title: recordArray[2],
+        payPerHour: recordArray[3],
+        timeInEvents: [],
+        timeOutEvents: []
+    }
+}
+
+const createEmployeeRecords = (recordsArray) => {
+    return recordsArray.map(rec => createEmployeeRecord(rec))
+}
+
+const createTimeInEvent = function (timeStamp) {
+    const [date, hour] = timeStamp.split(" ")
+    const inEvent = {
+        type: "TimeIn",
+        hour: parseInt(hour),
+        date: date
+    }
+    this.timeInEvents.push(inEvent)
+    return this
+}
+
+const createTimeOutEvent = function (timeStamp) {
+    const [date, hour] = timeStamp.split(" ")
+    const outEvent = {
+        type: "TimeOut",
+        hour: parseInt(hour),
+        date: date
+    }
+    this.timeOutEvents.push(outEvent)
+    return this
+}
+
+const hoursWorkedOnDate = function(targetDate) {
+    const inEvent = this.timeInEvents.find(inEvent => inEvent.date === targetDate)
+    const outEvent = this.timeOutEvents.find(oEvent => oEvent.date === targetDate)
+    return (outEvent.hour - inEvent.hour) / 100
+}
+
+const wagesEarnedOnDate = function(targetDate) {
+    return hoursWorkedOnDate.call(this, targetDate) * this.payPerHour
+}
+
+const findEmployeeByFirstName = function(srcArray, firstName){
+    return srcArray.find(rec => rec.firstName === firstName)
+}
+
+const calculatePayroll = function(recordArray) {
+    return recordArray.reduce((total, rec) => {
+        return total + allWagesFor.call(rec)
+    }, 0)
+}
+
 const allWagesFor = function () {
     const eligibleDates = this.timeInEvents.map(function (e) {
         return e.date
